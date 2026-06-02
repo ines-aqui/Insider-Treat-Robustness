@@ -17,7 +17,7 @@ The main goal of this project is to examine whether SHAP-guided adversarial samp
 **Key contributions:**
 - SHAP-guided evasion attack generation for tabular insider threat detection
 - Budget-constrained perturbation of mutable behavioral features
-- Comparison of SHAP-based, SHAP-random, and random attack strategies
+- Comparison of SHAP-based, SHAP-selected/random-direction, and non-SHAP random attack strategies
 - Adversarial retraining with single-source, mixed-source, and curriculum-style settings
 - Transfer matrix analysis for cross-attack defense generalization
 - Iterative retraining loop analysis to evaluate the marginal benefit of repeated hardening
@@ -31,7 +31,8 @@ The main goal of this project is to examine whether SHAP-guided adversarial samp
       ↓
 2__train_catboost.py
       ↓
-3-1__attack_generation.py  /  3-2__attack_generation.py
+3-1__attack_generation.py
+3-2__attack_generation.py
       ↓
 4-1__adversarial_retraining.py  /  4-2__adversarial_retraining_curriculum.py
       ↓
@@ -48,11 +49,11 @@ The main goal of this project is to examine whether SHAP-guided adversarial samp
 |------|-------------|
 | `1__preprocess.py` | Feature extraction from CERT r4.2 dataset. Builds session-level features across logon, device, email, file, and HTTP logs. Includes leak-free delta features via expanding past mean. |
 | `2__train_catboost.py` | 5-fold GroupKFold cross-validation training of CatBoost classifier. Computes ensemble-averaged SHAP importances across all folds. |
-| `3-1__attack_generation.py` | attack generation with 8 attack methods. |
-| `3-2__attack_generation.py` | attack generation with 6 attack methods. |
-| `4-1__adversarial_retraining.py` | 5-arm adversarial retraining experiment (clean baseline + 4 retraining strategies including mixed-source). |
+| `3-1__attack_generation.py` | Generates fixed-step evasion attacks, including SHAP-based, SHAP-random, and non-SHAP random attack variants. |
+| `3-2__attack_generation.py` | Extends attack generation with multistart and line-search strategies over perturbation direction and step size. |
+| `4-1__adversarial_retraining.py` | Main adversarial retraining experiment (clean baseline + 4 retraining strategies including mixed-source). |
 | `4-2__adversarial_retraining_curriculum.py` | Curriculum retraining: sequentially trains with increasing attack budget (B=1 → B=2 → B=3) using `init_model` on CPU. |
-| `5__transfer_matrix.py` | Full transfer matrix evaluation: 8 defense arms × 14 attack methods × 4 budgets. Assesses generalization of learned defenses. |
+| `5__transfer_matrix.py` | Transfer matrix evaluation: 8 defense arms × 14 attack methods × 4 budgets. Assesses generalization of learned defenses. |
 | `6__adversarial_loop_linesearch.py` | Iterative adversarial loop using line search attack. |
 
 ---
